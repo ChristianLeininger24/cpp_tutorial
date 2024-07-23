@@ -27,5 +27,5 @@
 	```
 - Run the test
 	```shell
-		make test
+	make test
 	```
