@@ -11,6 +11,7 @@ int row;
 int col;
 int boxRow;
 int boxCol;
+int points;
 
 
 // ____________________________________________________________________________
@@ -101,8 +102,15 @@ void addGoal() {
   boxRow = rand() % LINES;
   boxCol = rand() % COLS;
   attron(COLOR_PAIR(1) | A_REVERSE);
-  mvprintw(boxRow, boxCol, " ");
+  mvprintw(boxRow, boxCol, "  ");
   attroff(COLOR_PAIR(1) | A_REVERSE);
   refresh();
 }
 
+// ____________________________________________________________________________
+void drawPoints() {
+  mvprintw(0, 0, "Points: %d", points);
+  refresh();
+}
+
+// ____________________________________________________________________________

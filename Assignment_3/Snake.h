@@ -11,6 +11,9 @@ extern int col;
 extern int boxRow;
 extern int boxCol;
 
+// count points
+extern int points;
+
 
 // Initialize Ncurses.
 void startNcurses();
@@ -30,9 +33,11 @@ void moveBox(int key);
 // check if key is Up, Down, Left, Right
 bool isValidKey(int key);
 
-
 // add a goal
 void addGoal();
+
+// draw points 
+void drawPoints();
 
 // Clean up Ncurses.
 void endNcurses();
