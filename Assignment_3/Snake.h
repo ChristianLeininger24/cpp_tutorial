@@ -2,10 +2,19 @@
 // Author: Christian Leininger <programmer72024@gmail.com>
 
 #pragma once
-
+#include <random>
 // Position of the box.
 extern int row;
 extern int col;
+
+// position of the box
+extern int boxRow;
+extern int boxCol;
+
+// random generator
+extern std::mt19937 eng;
+extern std::uniform_int_distribution<> distr;
+extern std::uniform_int_distribution<> distc;
 
 // Initialize Ncurses.
 void startNcurses();
@@ -21,6 +30,13 @@ bool gameOver();
 
 // move the box
 void moveBox(int key);
+
+// check if key is Up, Down, Left, Right
+bool isValidKey(int key);
+
+
+// add a goal
+void addGoal();
 
 // Clean up Ncurses.
 void endNcurses();

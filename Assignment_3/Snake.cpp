@@ -4,10 +4,16 @@
 #include "./Snake.h"
 #include <ncurses.h>
 #include <unistd.h>
-
+#include <random>
 // ____________________________________________________________________________
 int row;
 int col;
+int boxRow;
+int boxCol;
+std::random_device rd;  // Obtain a random number from hardware
+std::mt19937 eng(rd()); // Seed the generator
+std::uniform_int_distribution<> distr(0, LINES - 1); // Define the range
+std::uniform_int_distribution<> distc(0, COLS - 1); // Define the range
 
 // ____________________________________________________________________________
 void startNcurses() {
@@ -85,4 +91,19 @@ void moveBox(int direction) {
     col++;
     break;
   }
+}
+
+// ____________________________________________________________________________
+bool isValidKey(int key){
+  return key == KEY_UP || key == KEY_DOWN || key == KEY_LEFT || key == KEY_RIGHT;
+}
+
+// ____________________________________________________________________________
+void addGoal() {
+  boxRow = distr(eng) % LINES;
+  boxCol = distc(eng) % COLS;
+  attron(COLOR_PAIR(1) | A_REVERSE);
+  mvprintw(boxRow, boxCol, "  ");
+  attroff(COLOR_PAIR(1) | A_REVERSE);
+  refresh();
 }
