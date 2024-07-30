@@ -3,7 +3,6 @@
 
 #pragma once
 
-#include <ncurses.h>
 #include <string>
 
 // Position of the box.
@@ -51,6 +50,18 @@ bool processUserInput(int key);
 
 // get probability
 bool setBoolWithProbability(double probability);
+
+// update the state of the game
+void updateState();
+
+// count living neighbors
+int aliveNeighbors(int row, int col);
+
+// copy old array to new array
+void copyArray();
+
+// create new state
+void createNewState();
 
 // Clean up Ncurses.
 void endNcurses();

@@ -10,8 +10,8 @@
 // ____________________________________________________________________________
 int row;
 int col;
-int numCols;
-int numRows;
+int numCols = 10;  // use 10 for testing
+int numRows = 10; // use 10 for testing
 int livingCells;
 int maxNumPixels;
 
@@ -20,23 +20,7 @@ bool new_pixels[MAX_NUM_PIXELS];
 
 std::string state = "default";
 
-// ____________________________________________________________________________
-void startNcurses() {
-  initscr();
-  // Check if initialization was successful
-  if (stdscr == NULL) {
-    fprintf(stderr, "Error initializing ncurses.\n");
-  }
-  curs_set(false);
-  noecho();
-  nodelay(stdscr, true);
-  keypad(stdscr, true);
-  start_color();
-  init_pair(1, COLOR_WHITE, COLOR_BLACK);
-  init_pair(2, COLOR_RED, COLOR_BLACK);
-  mousemask(ALL_MOUSE_EVENTS, NULL);
-  mouseinterval(0);
-}
+int numSteps;
 
 // ____________________________________________________________________________
 void initTerminal() {
@@ -59,11 +43,12 @@ void initGame() {
   state = "hold";
   maxNumPixels = numCols * numRows;
   // set all pixels to false
-  for (int i = 0; i < MAX_NUM_PIXELS; i++) {
+  for (int i = 0; i < maxNumPixels; i++) {
     current_pixels[i] = false;
     new_pixels[i] = false;
   }
   livingCells = 0;
+  numSteps = 0;
 }
 
 // ____________________________________________________________________________
@@ -73,7 +58,13 @@ void setPixel(int row, int col, bool value) {
 }
 
 // ____________________________________________________________________________
-bool getPixel(int row, int col) { return current_pixels[row * numCols + col]; }
+bool getPixel(int row, int col) { 
+  int pos = row * numCols + col;
+  // check befor the array is not out of bounds
+  if (pos < 0 || pos >= maxNumPixels) {
+    return false;
+  }
+  return current_pixels[pos]; }
 
 // ____________________________________________________________________________
 void drawPixels() {
@@ -148,4 +139,69 @@ bool processUserInput(int key) {
   }
 
   return quite;
+}
+
+// ____________________________________________________________________________
+void updateState() {
+  mvprintw(1, 0, " steps taken %d  current state is : %s", numSteps,  state.c_str());
+  if (state == "run") {
+    numSteps++;
+    copyArray();
+  }
+}
+
+// ____________________________________________________________________________
+void copyArray() {
+  for (int i = 0; i < maxNumPixels; i++) {
+    createNewState();
+    current_pixels[i] = new_pixels[i];
+  }
+}
+
+// ____________________________________________________________________________
+void createNewState() {
+  int livingNeighbors = 0;
+  for (int i = 0; i < maxNumPixels; i++) {
+    int row = i % numCols;
+    int col = i / numCols;
+    livingNeighbors = aliveNeighbors(row, col);
+    if (getPixel(row, col)) {
+      if (livingNeighbors < 2 || livingNeighbors > 3) {
+        new_pixels[i] = false;
+      } else {
+        new_pixels[i] = true;
+      }
+    } else {
+      if (livingNeighbors == 3) {
+        new_pixels[i] = true;
+      } else {
+        new_pixels[i] = false;
+      }
+    }
+  }
+}
+
+// ____________________________________________________________________________
+int aliveNeighbors(int row, int col) {
+  int count = 0;
+  int x;
+  int y;
+  // loop over all possible 8 neighbours
+  // -1 -1 | -1 0 | -1 1
+  // 0 -1  | current cell | 0 1
+  // 1 -1  | 1 0  | 1 1
+  for (int i = -1; i < 2; i++) {
+    for (int j = -1; j < 2; j++) {
+      if (i == 0 && j == 0) {
+        // skip the current cell
+        continue;
+      }
+      x = row + i;
+      y = col + j;
+      if (getPixel(x, y)) {
+        count++;
+      }
+    }
+  }
+  return count;
 }
