@@ -1,8 +1,10 @@
 // Copyright 2024
-// Author: Christian Leininger <programmer72024@gmail.com>
 // Author: Hannah Bast <bast@cs.uni-freiburg.de>
+// Author: Christian Leininger <programmer72024@gmail.com>
+
 
 #pragma once
+#include <gtest/gtest.h>
 
 
 
@@ -40,6 +42,7 @@ private:
 
  // move snake
  void moveSnake();
+ FRIEND_TEST(Snake, moveSnake);
 
  // check if snake is out of bounds
  bool isOutOfBounds();
