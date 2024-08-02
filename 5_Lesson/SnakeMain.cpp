@@ -1,3 +1,6 @@
+// Copyright 2024
+// Author: Hannah Bast <bast@cs.uni-freiburg.de>
+// Author: Christian Leininger <programmer72024@gmail.com>
 
 #include "./Snake.h"
 #include <ncurses.h>
@@ -10,7 +13,7 @@ double acceleration = 1;
 
 // Main function.
 int main() {
-  Snake snake;
+  TerminalManager terminalManager;
+  Snake snake(&terminalManager);
   snake.play();
 }
-
