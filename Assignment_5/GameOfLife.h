@@ -1,6 +1,8 @@
 
 
 #pragma once
+
+class GameOfLife {
 // The maximal number of cells, and the actual number of cells that is used by
 // the game.
 const int MAX_NUM_CELLS = 1'000'000;
@@ -59,3 +61,5 @@ bool get(int row, int col, bool isPrevious);
 
 // set function for current grid
 void set(int row, int col, bool value, bool isPrevious);
+
+};  // namespace GameOfLife
