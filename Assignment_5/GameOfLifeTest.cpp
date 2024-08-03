@@ -19,6 +19,23 @@ TEST(GameOfLife, numAliveNeighbours) {
   EXPECT_EQ(numAliveNeighbours(0, 0), 1);
 }
 
+TEST(GameOfLife, processUserInputQuit) { ASSERT_FALSE(processUserInput('q')); }
+
+TEST(GameOfLife, processUserInputSpace) {
+  isRunning = false;
+  ASSERT_TRUE(processUserInput(' '));
+  ASSERT_TRUE(isRunning);
+  ASSERT_TRUE(processUserInput(' '));
+  ASSERT_FALSE(isRunning);
+}
+
+TEST(GameOfLife, processUserInputSmallS) {
+  initGame();
+  numSteps = 0;
+  ASSERT_TRUE(processUserInput('s'));
+  ASSERT_EQ(numSteps, 1);
+}
+
 int main() {
   ::testing::InitGoogleTest();
   return RUN_ALL_TESTS();
