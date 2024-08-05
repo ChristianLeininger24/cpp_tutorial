@@ -3,14 +3,19 @@
 
 #pragma once
 #include "TerminalManager.h"
+#include <tuple>
 
 class UserInput {
 public:
   int keyCode_;
+  int mouseRow_;
+  int mouseCol_;
   bool isEscape();
   bool isSpace();
   bool isR();
   bool isS();
+  bool isMouseClick();
+  void updateMousePosition();
 };
 
 class TerminalManager {

@@ -24,7 +24,9 @@ TerminalManager::TerminalManager() {
   init_pair(4, COLOR_BLUE, COLOR_BLUE);
   init_pair(5, COLOR_YELLOW, COLOR_YELLOW);
   init_pair(6, COLOR_WHITE, COLOR_BLACK);
-
+  // Catch mouse events
+  mousemask(ALL_MOUSE_EVENTS, NULL);
+  mouseinterval(0);
   // COLS and LINES are global variables from ncurses (dimensions of screen).
   setKScreenWidth(COLS / 2);
   setKScreenHeight(LINES);
@@ -61,7 +63,6 @@ void TerminalManager::drawCell(int row, int col, bool alive) {
 }
 
 //______________________________________________________________________________
-
 UserInput TerminalManager::getUserInput() {
   UserInput userInput;
   userInput.keyCode_ = getch();
@@ -79,3 +80,17 @@ bool UserInput::isR() { return keyCode_ == 'r'; }
 
 //____________________________________________________________________________________
 bool UserInput::isS() { return keyCode_ == 's'; }
+
+//____________________________________________________________________________________
+bool UserInput::isMouseClick() { return keyCode_ == KEY_MOUSE; }
+
+//____________________________________________________________________________________
+void UserInput::updateMousePosition() {
+  MEVENT event;
+  if (getmouse(&event) == OK) {
+    if (event.bstate & BUTTON1_PRESSED) {
+      mouseRow_ = event.y;
+      mouseCol_ = event.x / 2;
+    }
+  }
+}

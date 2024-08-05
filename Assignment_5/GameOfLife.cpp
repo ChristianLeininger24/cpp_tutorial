@@ -35,8 +35,7 @@ void GameOfLife::initGame() {
 
 void GameOfLife::run() {
   initGame();
-   
-  
+
   // (*terminalManager_).clearScreen();
   while (handleInput((*terminalManager_).getUserInput())) {
     showState();
@@ -45,13 +44,11 @@ void GameOfLife::run() {
       usleep(100'000);
     }
   }
-  
 }
 
 // ____________________________________________________________________________
 void GameOfLife::showState() {
- 
- 
+
   for (int row = 0; row < (*terminalManager_).getKScreenHeight(); ++row) {
     for (int col = 0; col < (*terminalManager_).getKScreenWidth(); ++col) {
       bool isAlive = getCurrent(row, col);
@@ -67,13 +64,11 @@ void GameOfLife::showState() {
 }
 
 // ____________________________________________________________________________
-bool GameOfLife::handleInput(UserInput userInput){
-  
-  if(userInput.isEscape()){
-    // Exit
+bool GameOfLife::handleInput(UserInput userInput) {
+  if (userInput.isEscape()) {
+    // Exit the game.
     return false;
-  } else if (userInput.isSpace())
-  {
+  } else if (userInput.isSpace()) {
     isRunning_ = !isRunning_;
   } else if (userInput.isR()) {
     // genrate random pixels
@@ -81,11 +76,18 @@ bool GameOfLife::handleInput(UserInput userInput){
       for (int col = 0; col < (*terminalManager_).getKScreenWidth(); ++col) {
         setCurrent(row, col, drand48() > 0.8);
       }
-    } 
-    } else if (userInput.isS()) {
-      // Step update the screen
-      updateState();
-    } 
+    }
+  } else if (userInput.isS()) {
+    // Step update the screen
+    updateState();
+  }
+  if (userInput.isMouseClick()) {
+    userInput.updateMousePosition();
+    lastClickedCol_ = userInput.mouseCol_;
+    lastClickedRow_ = userInput.mouseRow_;
+    bool prev = getCurrent(lastClickedRow_, lastClickedCol_);
+    setCurrent(lastClickedRow_, lastClickedCol_, !prev);
+  }
   return true;
 }
 
@@ -129,9 +131,6 @@ int GameOfLife::numAliveNeighbours(int row, int col) {
   }
   return result;
 }
-
-
-
 
 /*
 // ____________________________________________________________________________
