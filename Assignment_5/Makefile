@@ -3,6 +3,7 @@
 
 CXX = clang++-12 -Wall -Wextra -fsanitize=address
 BASENAME = GameOfLife
+OBJS = GameOfLife.o  TerminalManager.o
 LIBS = -lncurses
 TESTLIBS = -lgtest -lgtest_main -lpthread
 
@@ -19,7 +20,7 @@ test: $(BASENAME)Test
 %.o: %.cpp *.h
 	$(CXX) -c $<
 
-%Main: %Main.o %.o
+%Main: %Main.o $(OBJS)
 	$(CXX) -o $@ $^ $(LIBS)
 
 %Test: %Test.o %.o

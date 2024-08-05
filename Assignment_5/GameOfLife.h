@@ -1,65 +1,74 @@
-
+// Copyright 2024
+// Author: Christian Leininger <programmer72024@gmail.com>
 
 #pragma once
 
+#include "TerminalManager.h"
 class GameOfLife {
-// The maximal number of cells, and the actual number of cells that is used by
-// the game.
-const int MAX_NUM_CELLS = 1'000'000;
-extern int numCols;
-extern int numRows;
+private:
+  // The maximal number of cells, and the actual number of cells that is used by
+  // the game.
+  static const int MAX_NUM_CELLS = 1'000'000;
 
-// The two pointers to the current and previous grid, they are switched after
-// each iteration.
-extern bool *previousGrid;
-extern bool *currentGrid;
+  bool grid1_[MAX_NUM_CELLS] = {};
+  bool grid2_[MAX_NUM_CELLS] = {};
+  // The two pointers to the current and previous grid, they are switched after
+  // each iteration.
+  bool *previousGrid_ = grid1_;
+  bool *currentGrid_ = grid2_;
 
-// Last coordinate clicked inside grid.
-extern int lastClickedCol;
-extern int lastClickedRow;
+  // Last coordinate clicked inside grid.
+  int lastClickedCol_ = -1;
+  int lastClickedRow_ = -1;
 
-// Additional global state
-extern bool isRunning;
-extern int numSteps;
-extern int numLivingCells;
+  // Additional global state
+  bool isRunning_ = false;
+  int numSteps_ = 0;
+  int numLivingCells_ = 0;
 
-// Intializes the terminal.
-void initTerminal();
+  TerminalManager *terminalManager_ = nullptr;
+  // Intializes the terminal.
+public:
+  // constructor
+  GameOfLife(TerminalManager *terminalManager);
 
-// Initializes the game.
-void initGame();
+  // Initializes the game.
+  void run();
 
-// Processes the user input.
-bool processUserInput(int key);
+  // Initializes the game.
+  void initGame();
 
-// Updates the state of the game.
-void updateState();
+  // Processes the user input.
+  bool handleInput(UserInput userInput);
 
-// Shows the state of the game.
-void showState();
+  // Updates the state of the game.
+  void updateState();
 
-// set value to current grid
-void setCurrent(int row, int col, bool value);
+  // Shows the state of the game.
+  void showState();
 
-// set value to previous grid
-void setPrevious(int row, int col, bool value);
+  // set value to current grid
+  void setCurrent(int row, int col, bool value);
 
-// count the number of living neighbors
-int numAliveNeighbours(int row, int col);
+  // set value to previous grid
+  void setPrevious(int row, int col, bool value);
 
-// check if state is accessible
-bool isLealPosition(int row, int col);
+  // count the number of living neighbors
+  int numAliveNeighbours(int row, int col);
 
-// get function for current grid
-bool getCurrent(int row, int col);
+  // check if state is accessible
+  bool isLegalPosition(int row, int col);
 
-// get function for previous grid
-bool getPrevious(int row, int col);
+  // get function for current grid
+  bool getCurrent(int row, int col);
 
-// get function for grid
-bool get(int row, int col, bool isPrevious);
+  // get function for previous grid
+  bool getPrevious(int row, int col);
 
-// set function for current grid
-void set(int row, int col, bool value, bool isPrevious);
+  // get function for grid
+  bool get(int row, int col, bool isPrevious);
 
-};  // namespace GameOfLife
+  // set function for current grid
+  void set(int row, int col, bool value, bool isPrevious);
+
+}; // namespace GameOfLife
